@@ -36,8 +36,16 @@ const SingleProduct = () => {
                         <RatingStars rating={"4"}/>
                     </div>
                 </div>
+
+                <button className='mt-6 px-6 py-3 bg-primary text-white rounded-md'>
+                    Add to Cart
+                </button>
         </div>
         </div>
+    </section>
+
+    <section className='section__container mt-8'>
+        Reviews Here
     </section>
     </>
   ) 
