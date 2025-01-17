@@ -9,7 +9,7 @@ const Productcards = ({products}) => {
         products.map((product,index)=>(
           <div key={index} className='product__cards'>
             <div className='relative'>
-              <Link to={`/shop/${product._id}`}>
+              <Link to={`/shop/${product.id}`}>
               <img src={product.image} alt="" className='max-h-96 md:h-64 w-full object-cover hover:scale-105 transition-all duration-500'/>
               </Link>
               <div className='hover:block absolute top-1 right-3'>
