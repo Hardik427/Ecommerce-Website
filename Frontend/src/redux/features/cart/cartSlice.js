@@ -26,7 +26,10 @@ const createSlice = createSlice(
 
                 state.selectedItems = setSelectedItems(state)
                 state.totalPrice = setTotalPrice(state);
+                state.tax = setTax(state);
+                state.grandTotal = setGrandTotal(state)
             }
+
         }
 })
 
@@ -38,3 +41,12 @@ export const setTotalPrice = (state) => state.products.reduce((total, product) =
 {
     return Number(total + product.quantity)
 })
+
+export const setTax = (state) => setTotalPrice(state) * state.taxeRate 
+
+export const setGrandTotal = (state) => {
+    return setTotalPrice(state) + setTotalPrice(state) * state.taxeRate 
+}
+
+export const {addToCart} = createSlice.actions;
+export default createSlice.reducer;
