@@ -9,12 +9,12 @@ const initialState = {
     grandTotal : 0
   }
 
-const createSlice = createSlice(
+const cartSlice = createSlice(
     {
         name: 'cart',
         initialState,
         reducers:{
-            AddtoCart : (state,action) => {
+            addToCart : (state,action) => {
                 const isExist = state.products.find((product) => product.id === action.payload.id);
 
                 if(!isExist) {
@@ -48,5 +48,5 @@ export const setGrandTotal = (state) => {
     return setTotalPrice(state) + setTotalPrice(state) * state.taxeRate 
 }
 
-export const {addToCart} = createSlice.actions;
-export default createSlice.reducer;
+export const {addToCart} = cartSlice.actions;
+export default cartSlice.reducer;

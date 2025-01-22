@@ -23,7 +23,7 @@ const Productcards = ({products}) => {
                 <button 
                 onClick={(e)=>{
                   e.stopPropagation();
-                  handleAddToCart(product)
+                  handleAddToCart(product);
                 }}>
                   <i className='ri-shopping-cart-2-line bg-primary p-1.5 text-white hover:bg-primary-dark'></i>
                 </button>
