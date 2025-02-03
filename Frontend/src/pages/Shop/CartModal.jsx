@@ -77,4 +77,3 @@ const CartModal = ({ products, isOpen, onClose }) => {
 }
 
 export default CartModal
-//  5:15
