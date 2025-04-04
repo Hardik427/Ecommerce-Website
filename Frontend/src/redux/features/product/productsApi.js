@@ -55,7 +55,7 @@ const productsApi = createApi({
                 method: 'DELETE',
                 credentials: 'include'
             }), 
-            invalidatesTags: ['Products']
+            invalidatesTags: (result, error, id) => [{ type: 'Products', id }],
         })
     })
 });
