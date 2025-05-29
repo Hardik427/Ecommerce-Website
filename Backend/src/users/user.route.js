@@ -12,7 +12,7 @@ router.post('/register', async (req, res) => {
         console.log(req.body);
         res.status(201).send({ message: "User Registered successfully!" })
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send({ message: "Error Registering User" })
     }
 })
@@ -44,7 +44,28 @@ router.post('/login', async (req, res) => {
     }
 })
 
+// Logout Route
+router.post('/logout',async (req,res) =>{
+    res.clearCookie('token');
+    res.status(200).send({message:"Logged out successfully"});
+})
 
+// Delete User Route
+router.delete('/user/:id',async (req,res) => {
+    try {
+        const {id} = req.params;
+        const user = await User.findByIdAndDelete(id);
+        if(!user)
+        {
+            return res.status(404).send({message:"User not found"})
+        }
+        res.status(200).send({message:"User Deleted Successfully"})
+    } catch (error) {
+        console.error("Error deleting user");
+        res.status(500).send({ message: "Error Deleting User" })
+    }
+    
+})
 
 module.exports = router;
 
