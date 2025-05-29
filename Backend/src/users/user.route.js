@@ -45,38 +45,55 @@ router.post('/login', async (req, res) => {
 })
 
 // Logout Route
-router.post('/logout',async (req,res) =>{
+router.post('/logout', async (req, res) => {
     res.clearCookie('token');
-    res.status(200).send({message:"Logged out successfully"});
+    res.status(200).send({ message: "Logged out successfully" });
 })
 
 // Delete User Route
-router.delete('/user/:id',async (req,res) => {
+router.delete('/user/:id', async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const user = await User.findByIdAndDelete(id);
-        if(!user)
-        {
-            return res.status(404).send({message:"User not found"})
+        if (!user) {
+            return res.status(404).send({ message: "User not found" })
         }
-        res.status(200).send({message:"User Deleted Successfully"})
+        res.status(200).send({ message: "User Deleted Successfully" })
     } catch (error) {
         console.error("Error deleting user");
         res.status(500).send({ message: "Error Deleting User" })
     }
-    
+
 })
 
 //Get all users
-router.get('/users',async (req,res) =>{
+router.get('/users', async (req, res) => {
     try {
-        const user = await User.find({},'id email role').sort({createdAt:-1});
+        const user = await User.find({}, 'id email role').sort({ createdAt: -1 });
         res.status(200).send(user)
     } catch (error) {
         console.error("Error Fetching user");
         res.status(500).send({ message: "Error Fetching User" })
     }
 })
+
+//update role
+router.put('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { role } = req.body;
+        const user = await User.findByIdAndUpdate(id, { role }, { new: true });
+        if (!user) {
+            res.status(404).send({ message: "User not found" });
+        }
+        res.status(200).send({ message: "User role Updated Successfullly ", user });
+    } catch (error) {
+        console.error("Error updating role");
+        res.status(500).send({ message: "Error updating role" })
+    }
+})
+
+
 module.exports = router;
 
 //7:12
