@@ -67,6 +67,16 @@ router.delete('/user/:id',async (req,res) => {
     
 })
 
+//Get all users
+router.get('/users',async (req,res) =>{
+    try {
+        const user = await User.find({},'id email role').sort({createdAt:-1});
+        res.status(200).send(user)
+    } catch (error) {
+        console.error("Error Fetching user");
+        res.status(500).send({ message: "Error Fetching User" })
+    }
+})
 module.exports = router;
 
 //7:12
