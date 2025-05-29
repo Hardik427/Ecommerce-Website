@@ -93,7 +93,38 @@ router.put('/users/:id', async (req, res) => {
     }
 })
 
-
+router.patch('/edit-profile', async (req, res) => {
+    try {
+        const { userId, username, profileImage, bio, profession } = req.body;
+        if (!userId) {
+            res.status(400).send({ message: "User Id is required" })
+        }
+        const user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send({ message: "User not found" });
+        }
+        if (username !== undefined) user.username = username
+        if (profileImage !== undefined) user.profileImage = profileImage
+        if (bio !== undefined) user.bio = bio
+        if (profession !== undefined) user.profession = profession
+        await user.save();
+        res.status(200).send({ message: "User profile updated Successfully", 
+             user : {
+                _id : user._id,
+                email : user.email,
+                username : user.username,
+                role : user.role,
+                profileImage : user.profileImage,
+                bio : user.bio,
+                profession : user.profession
+            }
+         });
+    } catch (error) {
+        console.error("Error updating User profile");
+        res.status(500).send({ message: "Error updating User profile" 
+        })
+    }
+})
 module.exports = router;
 
 //7:12
