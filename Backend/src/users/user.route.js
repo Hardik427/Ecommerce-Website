@@ -19,8 +19,8 @@ router.post('/register', async (req, res) => {
 //Login Route
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ username });
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
         if (!user) {
             res.status(404).send({ message: "You are not Registered" });
         }
