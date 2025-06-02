@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useLoginUserMutation } from '../redux/features/auth/authApi';
 const Login = () => {
@@ -10,7 +10,7 @@ const Login = () => {
 
     const dispatch = useDispatch();
     const [loginUser, {isLoading : loginLoading}] = useLoginUserMutation();
-    
+    const navigate = useNavigate();
     console.log(loginUser)
     const handleLogin = async (e) => {
             e.preventDefault();
