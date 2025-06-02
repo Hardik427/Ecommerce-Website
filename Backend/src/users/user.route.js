@@ -36,12 +36,7 @@ router.post('/login', async (req, res) => {
             secure: true,
             sameSite: 'None'
         });
-        res.status(200).send({ message: "Logged In Successfull!", token, user :{
-            username : user.username,
-            email : user.email,
-            role : user.role,
-            _id : user._id
-        } })
+        res.status(200).send({ message: "Logged In Successfull!", token, user })
 
     } catch (error) {
         console.log(error);
