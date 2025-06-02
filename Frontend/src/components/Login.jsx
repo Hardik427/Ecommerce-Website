@@ -22,6 +22,7 @@ const Login = () => {
             const response = await loginUser(data).unwrap();
             // console.log(response)
             alert("Login successfull")
+            navigate('/')
           } catch (error) {
             setMessage("Please Provide valid Email and Password")
           }
