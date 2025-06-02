@@ -44,7 +44,7 @@ const Register = () => {
 
                 </form>
 
-                <p className='my-5 italic text-sm text-center'>Have an Account? Please<Link to='/login' className=' underline text-red-700 px-1'>Login</Link></p>
+                <p className='my-5 italic text-sm text-center'>Have an Account? Please<Link to='/login' className=' underline text-red-700 px-1'>Register</Link></p>
             </div>
         </section>
     )
