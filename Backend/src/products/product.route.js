@@ -115,4 +115,17 @@ router.delete('/delete-product/:id', async (req, res) => {
         res.status(500).send({ message: "Failed to delete the product" })
     }
 })
+
+// get related products 
+router.get('/related/:id', async (req,res) =>{
+    try {
+        const {id} = req.params;
+
+        if(!id) {
+            res.status(400).send({message:"Product id is required"})
+        }
+    } catch (error) {
+        
+    }
+})
 module.exports = router;
