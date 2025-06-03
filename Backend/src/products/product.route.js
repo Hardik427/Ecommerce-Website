@@ -97,22 +97,22 @@ router.patch('/update-product/:id', verifyToken, async (req, res) => {
     }
 })
 
-//delete product 
-// router.delete('/delete-product/:id', async (req, res) => {
-//     try {
-//         const productId = req.params.id;
-//         const deletedProduct = await Product.findByIdAndDelete(productId);
-//         if (!deletedProduct) {
-//             res.status(404).send({ message: "Product not found." })
-//         }
-//         res.status(200).send({
-//             message: "Product deleted successfully",
-//             product: deletedProduct
-//         })
-//     }
-//     catch (error) {
-//         console.error("Error Deleting product", error);
-//         res.status(500).send({ message: "Failed to delete the product" })
-//     }
-// })
+delete product 
+router.delete('/delete-product/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const deletedProduct = await Product.findByIdAndDelete(productId);
+        if (!deletedProduct) {
+            res.status(404).send({ message: "Product not found." })
+        }
+        res.status(200).send({
+            message: "Product deleted successfully",
+            product: deletedProduct
+        })
+    }
+    catch (error) {
+        console.error("Error Deleting product", error);
+        res.status(500).send({ message: "Failed to delete the product" })
+    }
+})
 module.exports = router;
