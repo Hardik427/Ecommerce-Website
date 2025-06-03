@@ -10,5 +10,5 @@ const reviewSchema = new Schema({
   timestamps : true
 });
 
-const Reviews = model("Review", productSchema);
+const Reviews = model("Review", reviewSchema);
 module.exports = Reviews;
