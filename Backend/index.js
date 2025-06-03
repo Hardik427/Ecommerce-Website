@@ -19,7 +19,10 @@ app.use(cors({
 }))
 //all routes
 const authRoutes = require('./src/users/user.route');
+const productRoutes = require('./src/products/product.route')
+
 app.use('/api/auth', authRoutes);
+app.use('/api/products',productRoutes)
 
 
 main().then(console.log("Database is successfully connected")).catch(err => console.log(err));
