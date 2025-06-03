@@ -97,7 +97,7 @@ router.patch('/update-product/:id', verifyToken, async (req, res) => {
     }
 })
 
-delete product 
+// delete product 
 router.delete('/delete-product/:id', async (req, res) => {
     try {
         const productId = req.params.id;
