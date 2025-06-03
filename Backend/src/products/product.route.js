@@ -46,15 +46,15 @@ router.get('/', async (req, res) => {
             const max = parseFloat(maxPrice);
             if (!isNaN(min) && !isNaN(max)) {
                 filter.price = { $gte: min, $lte: max }
-           }
+            }
         }
         const skip = (parseInt(page) - 1) * parseInt(limit)
 
         const totalProducts = await Product.countDocuments(filter);
         const totalPages = Math.ceil(totalProducts / parseInt(limit))
-        const products = await Product.find(filter).skip(skip).limit(parseInt(limit)).populate("author","email").sort({createdAt : -1});
+        const products = await Product.find(filter).skip(skip).limit(parseInt(limit)).populate("author", "email").sort({ createdAt: -1 });
 
-        res.status(200).send({products,totalPages,totalProducts })
+        res.status(200).send({ products, totalPages, totalProducts })
     } catch (error) {
         console.error("Error Fetching all product", error);
         res.status(500).send({ message: "Failed to Get all products" })
@@ -62,16 +62,15 @@ router.get('/', async (req, res) => {
 })
 
 //get single product
-router.get('/:id',async (req,res) => {
+router.get('/:id', async (req, res) => {
     try {
         const productId = req.params.id;
-        const product = await Product.findById(productId).populate("author","username email");
-        if(!product)
-        {
-           res.status(404).send({message : "Product not found"}) 
+        const product = await Product.findById(productId).populate("author", "username email");
+        if (!product) {
+            res.status(404).send({ message: "Product not found" })
         }
-        const review = await Reviews.find({productId}).populate("userId","username email");
-        res.status(200).send({product,review})
+        const review = await Reviews.find({ productId }).populate("userId", "username email");
+        res.status(200).send({ product, review })
     } catch (error) {
         console.error("Error Getting product", error);
         res.status(500).send({ message: "Failed to get the product" })
@@ -79,16 +78,41 @@ router.get('/:id',async (req,res) => {
 })
 
 //update product
-router.patch('/update-product/:id',verifyToken,async (req,res) => {
-    const productId = req.params.id;
-    const updatedProduct = await Product.findByIdAndUpdate(productId,{...req.body},{new:true})
+router.patch('/update-product/:id', verifyToken, async (req, res) => {
+   try {const productId = req.params.id;
+    const updatedProduct = await Product.findByIdAndUpdate(productId, { ...req.body }, { new: true })
 
-    if(!updatedProduct){
-        res.status(404).send({message : "Product not found."})
+    if (!updatedProduct) {
+        res.status(404).send({ message: "Product not found." })
     }
+
+    await Reviews.deleteMany({productId:productId})
     res.status(200).send({
-        message : "Product updated successfully",
-        product : updatedProduct
-    })
+        message: "Product updated successfully",
+        product: updatedProduct
+    })}
+    catch (error) {
+        console.error("Error Deleting product", error);
+        res.status(500).send({ message: "Failed to delete the product" })
+    }
+})
+
+//delete product 
+router.delete('/delete-product/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const deletedProduct = await Product.findByIdAndDelete(productId);
+        if (!deletedProduct) {
+            res.status(404).send({ message: "Product not found." })
+        }
+        res.status(200).send({
+            message: "Product deleted successfully",
+            product: deletedProduct
+        })
+    }
+    catch (error) {
+        console.error("Error Deleting product", error);
+        res.status(500).send({ message: "Failed to delete the product" })
+    }
 })
 module.exports = router;
