@@ -23,11 +23,11 @@ const productsApi = createApi({
             },
             providesTags: ['Products']
     }),
-    //     fetchProductById: builder.query({
-    //         query: (productId) => `/${productId}`,
-    //         providesTags: (result, error, productId) => [{ type: 'Products', id: productId }],
+        fetchProductById: builder.query({
+            query: (productId) => `/${productId}`,
+            providesTags: (result, error, productId) => [{ type: 'Products', id: productId }],
                 
-    // }),
+    }),
         // addProduct: builder.mutation({
         //     query: (newProduct) => ({
         //         url: '/create-product',
