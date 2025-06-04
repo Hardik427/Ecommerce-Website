@@ -37,12 +37,12 @@ const productsApi = createApi({
             }),
             invalidatesTags: ['Products'],
         }),
-        // fetchRelatedProducts: builder.query({
-        //     query: (id) => `/related-products/${id}`,
-        // }),
-        // updateProduct: builder.mutation({
-        //     query: ({})
-        // })
+        fetchRelatedProducts: builder.query({
+            query: (id) => `/related-products/${id}`,
+        }),
+        updateProduct: builder.mutation({
+            query: ({})
+        })
     })
 });
 
