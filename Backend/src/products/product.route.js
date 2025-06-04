@@ -2,6 +2,7 @@ const express = require('express')
 const Product = require('../products/products.model');
 const Reviews = require('../reviews/reviews.model');
 const verifyToken = require('../middleware/verifyToken');
+const verifyAdmin = require('../middleware/verifyAdmin');
 
 const router = express.Router();
 
@@ -78,7 +79,7 @@ router.get('/:id', async (req, res) => {
 })
 
 //update product
-router.patch('/update-product/:id', verifyToken, async (req, res) => {
+router.patch('/update-product/:id', verifyToken,verifyAdmin, async (req, res) => {
     try {
         const productId = req.params.id;
         const updatedProduct = await Product.findByIdAndUpdate(productId, { ...req.body }, { new: true })
@@ -100,7 +101,7 @@ router.patch('/update-product/:id', verifyToken, async (req, res) => {
 })
 
 // delete product 
-router.delete('/delete-product/:id', async (req, res) => {
+router.delete('/delete-product/:id',verifyToken,verifyAdmin, async (req, res) => {
     try {
         const productId = req.params.id;
         const deletedProduct = await Product.findByIdAndDelete(productId);
@@ -121,21 +122,34 @@ router.delete('/delete-product/:id', async (req, res) => {
 // get related products 
 router.get('/related-products/:id', async (req, res) => {
     try {
-        const productId = req.params.id;
-        const product = await Product.findById(productId);
+        const { id } = req.params;
+        if (!id) {
+            return res.status(400).send({ message: "Product ID is required" });
+        }
+        const product = await Product.findById(id);
         if (!product) {
             return res.status(404).send({ message: "Product not found" });
         }
+
+        const titleRegex = new RegExp(
+            product.name
+                .split(' ')
+                .filter(word => word.length > 2)
+                .join('|'), 'i'
+        )
+
         const relatedProducts = await Product.find({
-            category: product.category,
-            _id: { $ne: productId } // Exclude the current product
-        }).limit(4).populate("author", "email");
+            _id: { $ne: id },
+            $or: [
+                { name: titleRegex },
+                { category: product.category },
+                { color: product.color },
+            ]
+        });
         res.status(200).send(relatedProducts);
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Error Fetching related products", error);
         res.status(500).send({ message: "Failed to get related products" });
     }
 });
-
 module.exports = router;
