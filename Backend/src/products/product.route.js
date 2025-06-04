@@ -79,18 +79,20 @@ router.get('/:id', async (req, res) => {
 
 //update product
 router.patch('/update-product/:id', verifyToken, async (req, res) => {
-   try {const productId = req.params.id;
-    const updatedProduct = await Product.findByIdAndUpdate(productId, { ...req.body }, { new: true })
+    try {
+        const productId = req.params.id;
+        const updatedProduct = await Product.findByIdAndUpdate(productId, { ...req.body }, { new: true })
 
-    if (!updatedProduct) {
-        res.status(404).send({ message: "Product not found." })
+        if (!updatedProduct) {
+            res.status(404).send({ message: "Product not found." })
+        }
+
+        await Reviews.deleteMany({ productId: productId })
+        res.status(200).send({
+            message: "Product updated successfully",
+            product: updatedProduct
+        })
     }
-
-    await Reviews.deleteMany({productId:productId})
-    res.status(200).send({
-        message: "Product updated successfully",
-        product: updatedProduct
-    })}
     catch (error) {
         console.error("Error Deleting product", error);
         res.status(500).send({ message: "Failed to delete the product" })
@@ -117,6 +119,23 @@ router.delete('/delete-product/:id', async (req, res) => {
 })
 
 // get related products 
-// continue tomorrow
+router.get('/related-products/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).send({ message: "Product not found" });
+        }
+        const relatedProducts = await Product.find({
+            category: product.category,
+            _id: { $ne: productId } // Exclude the current product
+        }).limit(4).populate("author", "email");
+        res.status(200).send(relatedProducts);
+    }
+    catch (error) {
+        console.error("Error Fetching related products", error);
+        res.status(500).send({ message: "Failed to get related products" });
+    }
+});
 
 module.exports = router;
