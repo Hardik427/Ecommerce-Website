@@ -41,7 +41,13 @@ const productsApi = createApi({
             query: (id) => `/related-products/${id}`,
         }),
         updateProduct: builder.mutation({
-            query: ({})
+            query:({id , ...rest}) => ({
+                url: `/update-product/${id}`,
+                method: 'PATCH',
+                body: rest,
+                credentials: 'include'
+            }),
+            invalidatesTags : ['Products'],
         })
     })
 });
