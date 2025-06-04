@@ -12,8 +12,8 @@ const productsApi = createApi({
         fetchAllProducts: builder.query({
             query: ({category, color, minPrice, maxPrice, page = 1, limit = 10}) => {
                 const queryParams = new URLSearchParams({
-                    category: category || 'all',
-                    color: color || 'all',
+                    category: category || '',
+                    color: color || '',
                     minPrice: minPrice || 0,
                     maxPrice: maxPrice || '',
                     page: page.toString(),
