@@ -48,8 +48,24 @@ const productsApi = createApi({
                 credentials: 'include'
             }),
             invalidatesTags : ['Products'],
+        }),
+        deleteProduct: builder.mutation({
+            query: (id) => ({
+                url: `/${id}`,
+                method: 'DELETE',
+                credentials: 'include'
+            }), 
+            invalidatesTags: ['Products']
         })
     })
 });
+export const {
+    useFetchAllProductsQuery,
+    useFetchProductByIdQuery,
+    useAddProductMutation,
+    useFetchRelatedProductsQuery,
+    useUpdateProductMutation,
+    useDeleteProductMutation
+} = productsApi;
 
 export default productsApi;
