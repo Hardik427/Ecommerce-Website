@@ -28,15 +28,15 @@ const productsApi = createApi({
             providesTags: (result, error, productId) => [{ type: 'Products', id: productId }],
                 
     }),
-        // addProduct: builder.mutation({
-        //     query: (newProduct) => ({
-        //         url: '/create-product',
-        //         method: 'POST',
-        //         body: newProduct,
-        //         credentials: 'include',
-        //     }),
-        //     invalidatesTags: ['Products'],
-        // }),
+        addProduct: builder.mutation({
+            query: (newProduct) => ({
+                url: '/create-product',
+                method: 'POST',
+                body: newProduct,
+                credentials: 'include',
+            }),
+            invalidatesTags: ['Products'],
+        }),
         // fetchRelatedProducts: builder.query({
         //     query: (id) => `/related-products/${id}`,
         // }),
