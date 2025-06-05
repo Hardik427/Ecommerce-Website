@@ -28,7 +28,7 @@ const ShopPage = () => {
     const { category, color, priceRange } = filtersState;
     const [minPrice, maxPrice] = priceRange.split('-').map(Number);
 
-    const {data,error ,isLoading} = useFetchAllProductsQuery({
+    const {data : {products = [],totalPages,totalProducts}={},error ,isLoading} = useFetchAllProductsQuery({
         category: category !== 'all' ? category : undefined,
         color: color !== 'all' ? color : undefined,
         minPrice: isNaN(minPrice) ? undefined : minPrice,
@@ -38,7 +38,6 @@ const ShopPage = () => {
     });
 
     // Some Error is occurring in the API call, so will solve it tomorrow
-    console.log(data)
     const clearFilters = () => {
         setFiltersState({
             category: 'all',
@@ -46,7 +45,6 @@ const ShopPage = () => {
             priceRange: ''
         })
     }
-console.log(error)
     if (isLoading) return <div className='text-center text-2xl font-semibold'>Loading...</div>
     if (error) return <div className='text-center text-2xl font-semibold'>Something went wrong!</div>
 
