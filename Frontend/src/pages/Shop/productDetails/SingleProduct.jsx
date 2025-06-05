@@ -2,10 +2,12 @@ import React from 'react'
 import {Link, useParams} from 'react-router-dom'
 import RatingStars from './../../../components/RatingStars';
 import { useFetchProductByIdQuery } from '../../../redux/features/product/ProductsApi';
+import { addToCart } from '../../../redux/features/cart/cartSlice';
+import { useDispatch } from 'react-redux';
 const SingleProduct = () => {
     const {id} = useParams();
-
     const {data, error, isLoading} = useFetchProductByIdQuery(id);
+    const dispatch = useDispatch();
     if(isLoading) {
         return (
             <div className='text-center text-2xl font-semibold py-12'>
@@ -16,10 +18,13 @@ const SingleProduct = () => {
     }
     // console.log(singleProduct);
     if (error) return <div className='text-center text-2xl font-semibold'>Something went wrong!</div>
-
+    
     const singleProduct = data?.product || {};
     const reviews = data?.reviews || [];
-    console.log(singleProduct, reviews);
+    // console.log(singleProduct, reviews);
+    const handleAddToCart = (product) => {
+        dispatch(addToCart(product))
+    }
   return (
     <>
     <section className='section__container bg-primary-light'>
@@ -56,7 +61,12 @@ const SingleProduct = () => {
                     </div>
                 </div>
 
-                <button className='mt-6 px-6 py-3 bg-primary text-white rounded-md'>
+                <button className='mt-6 px-6 py-3 bg-primary text-white rounded-md'
+                onClick={(e)=> {
+                    e.stopPropagation();
+                    handleAddToCart(singleProduct);
+                }}
+                >
                     Add to Cart
                 </button>
         </div>
