@@ -1,8 +1,25 @@
 import React from 'react'
 import {Link, useParams} from 'react-router-dom'
 import RatingStars from './../../../components/RatingStars';
+import { useFetchProductByIdQuery } from '../../../redux/features/product/ProductsApi';
 const SingleProduct = () => {
     const {id} = useParams();
+
+    const {data, error, isLoading} = useFetchProductByIdQuery(id);
+    if(isLoading) {
+        return (
+            <div className='text-center text-2xl font-semibold py-12'>
+                <span className="animate-spin mr-2 inline-block w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full"></span>
+                Loading...
+            </div>
+        );
+    }
+    // console.log(singleProduct);
+    if (error) return <div className='text-center text-2xl font-semibold'>Something went wrong!</div>
+
+    const singleProduct = data?.product || {};
+    const reviews = data?.reviews || [];
+    console.log(singleProduct, reviews);
   return (
     <>
     <section className='section__container bg-primary-light'>
@@ -12,7 +29,7 @@ const SingleProduct = () => {
                 <i className='ri-arrow-right-s-line'></i>
                 <span className=' hover:text-primary'><Link to="/shop">shop</Link></span>
                 <i className='ri-arrow-right-s-line'></i>
-                <span className=' hover:text-primary'><Link to="/">product name</Link></span>
+                <span className=' hover:text-primary'><Link to="/">{singleProduct.name}</Link></span>
             </div>
     </section>
 
@@ -20,20 +37,22 @@ const SingleProduct = () => {
         <div className='flex flex-col items-center md:flex-row gap-8'>
         {/*product image*/}
         <div className='md:w-1/2 w-full'>
-           <img src="https://images.unsplash.com/photo-1512201078372-9c6b2a0d528a?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" 
+           <img 
+           src={`${singleProduct.image}`}
+            alt="" 
            className='rounded-md w-full h-auto'/>
         </div>
 
         <div className='md:w-1/2 w-full'>
-            <h3 className='text-2xl font-semibold mb-4'>Product Name</h3>
-            <p className='text-xl text-primary mb-4' >$100 <s>$130</s></p>
-            <p className='text-gray-700 mb-4'>This is product Description </p>
+            <h3 className='text-2xl font-semibold mb-4'>{singleProduct.name}</h3>
+            <p className='text-xl text-primary mb-4' >${singleProduct.price} <s>${singleProduct.oldPrice}</s></p>
+            <p className='text-gray-700 mb-4'>{singleProduct.description} </p>
                 <div>
-                    <p><strong>Category:</strong> accessories</p>
-                    <p><strong>Color:</strong> Blue</p>
+                    <p><strong>Category :</strong> {singleProduct.category}</p>
+                    <p><strong>Color : </strong>{singleProduct.color}</p>
                     <div className='flex gap-1'>
-                        <strong>Rating:</strong>
-                        <RatingStars rating={"4"}/>
+                        <strong>Rating :</strong>
+                        <RatingStars rating={singleProduct.rating}/>
                     </div>
                 </div>
 
@@ -45,7 +64,23 @@ const SingleProduct = () => {
     </section>
 
     <section className='section__container mt-8'>
-        Reviews Here
+        {/* Reviews */}
+        <h3 className='text-2xl font-semibold mb-4'>Customer Reviews</h3>
+        <div className='space-y-4'>
+            {reviews && reviews.length > 0 ? (
+                reviews.map((review, index) => (
+                    <div key={index} className='border p-4 rounded-md'>
+                        <div className='flex items-center gap-2 mb-2'>
+                            <span className='font-semibold'>{review.userName}</span>
+                            <RatingStars rating={review.rating} />
+                        </div>
+                        <p>{review.comment}</p>
+                    </div>
+                ))
+            ) : (
+                <p className='text-gray-500'>No reviews yet.</p>
+            )}
+        </div>
     </section>
     </>
   ) 
