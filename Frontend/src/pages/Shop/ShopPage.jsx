@@ -28,7 +28,7 @@ const ShopPage = () => {
     const { category, color, priceRange } = filtersState;
     const [minPrice, maxPrice] = priceRange.split('-').map(Number);
 
-    const {data : {products = [],totalPages,totalProducts}={},error ,isLoading} = useFetchAllProductsQuery({
+    const { data: { products = [], totalPages, totalProducts } = {}, error, isLoading } = useFetchAllProductsQuery({
         category: category !== 'all' ? category : undefined,
         color: color !== 'all' ? color : undefined,
         minPrice: isNaN(minPrice) ? undefined : minPrice,
@@ -45,8 +45,21 @@ const ShopPage = () => {
             priceRange: ''
         })
     }
-    if (isLoading) return <div className='text-center text-2xl font-semibold'>Loading...</div>
+    if(isLoading) {
+        return (
+            <div className='text-center text-2xl font-semibold py-12'>
+                <span className="animate-spin mr-2 inline-block w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full"></span>
+                Loading...
+            </div>
+        );
+    }
+
     if (error) return <div className='text-center text-2xl font-semibold'>Something went wrong!</div>
+
+    const startProduct = (currentPage - 1) * productsPerPage + 1;
+    const endProduct = startProduct + products.length - 1;
+
+
 
     return (
         <>
@@ -62,8 +75,34 @@ const ShopPage = () => {
                         clearFilters={clearFilters} />
 
                     <div>
-                        <h3 className='text-xl font-medium mb-4 '>Products Available : {products.length}</h3>
+                        <h3 className='text-xl font-medium mb-4 '>
+                            Showing {startProduct} - {endProduct} of {totalProducts} Products
+                        </h3>
                         <Productcards products={products} />
+
+                        {/* // pagination */}
+                        <div className='mt-6 flex justify-center'>
+                            <button className='px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2'
+                                disabled={currentPage === 1}
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            >Previous</button>
+                            {
+                                [...Array(totalPages)].map((_, index) => (
+                                    <button
+                                        key={index}
+                                        className={`px-4 py-2 ${currentPage === index + 1 ?
+                                            "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"} rounded-md mx-2`}
+                                        onClick={() => setCurrentPage(index + 1)}>
+                                        {index + 1}</button>
+                                ))
+
+                            }
+                            <button className='px-4 py-2 bg-gray-300 text-gray-700 rounded-md ml-2'
+                                disabled={currentPage === totalPages || totalProducts === 0}
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            >Next</button>
+                        </div>
+
                     </div>
                 </div>
             </section>
