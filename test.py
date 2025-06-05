@@ -2,7 +2,7 @@ import requests
 import random
 
 # Fetch products
-response = requests.get("https://dummyjson.com/products?limit=20")
+response = requests.get("https://dummyjson.com/products/category/womens-jewellery")
 if response.status_code != 200:
     print("❌ Failed to fetch products.")
     exit()
@@ -29,8 +29,10 @@ for product in all_products:
         "rating": product.get("rating"),
         "author": author
     }
+    
+    print(f"Processing product: {filtered_product['name']}")
 
-    # Send to backend
+    # Send to backend?
     try:
         res = requests.post(url, json=filtered_product)
         if res.status_code in [200, 201]:
