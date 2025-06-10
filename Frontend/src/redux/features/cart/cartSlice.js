@@ -15,9 +15,7 @@ const cartSlice = createSlice(
         initialState,
         reducers: {
             addToCart: (state, action) => {
-                // console.log(action.payload)
                 const isExist = state.products.find((product) => product._id === action.payload._id);
-                // console.log(isExist)
                 if (!isExist) {
                     state.products.push({ ...action.payload, quantity: 1 })
                 } else {
@@ -49,7 +47,6 @@ const cartSlice = createSlice(
                 state.grandTotal = setGrandTotal(state);
             },
             removeFromCart: (state, action) => {
-                // console.log(action.payload)
                 state.products = state.products.filter((product) => product._id !== action.payload.id);
                 state.selectedItems = setSelectedItems(state);
                 state.totalPrice = setTotalPrice(state);
