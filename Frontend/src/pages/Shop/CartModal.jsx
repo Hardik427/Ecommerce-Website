@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 const CartModal = ({ products, isOpen, onClose }) => {
     const dispatch = useDispatch();
 
+    // console.log(products)
     const handleQuantity = (type,id) => {
         const payload = {type,id};
         dispatch(updateQuantity(payload));
