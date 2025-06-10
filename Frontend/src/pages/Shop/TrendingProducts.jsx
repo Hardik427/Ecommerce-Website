@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Productcards from './ProductCards';
-import products from '../../data/products.json'
+// import products from '../../data/products.json'
+import { useFetchAllProductsQuery } from '../../redux/features/product/productsApi';
 
 
 const TrendingProducts = () => {
@@ -9,6 +10,28 @@ const TrendingProducts = () => {
   const loadMoreProducts = () => {
     setVisibleProducts(prevCount => prevCount + 4)
   }
+
+  const { data: { products = [] } = {}, error, isLoading } = useFetchAllProductsQuery({
+    category: 'all',
+    color: 'all',
+    minPrice: 0,
+    maxPrice: '',
+    page: 1,
+    limit: 100 
+  }); 
+
+  if (isLoading) {
+    return (
+      <div className='text-center text-2xl font-semibold py-12'>
+        <span className="animate-spin mr-2 inline-block w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full"></span>
+        Loading...
+      </div>
+    );
+  }
+  if (error) {
+    return <div className='text-center text-2xl font-semibold'>Something went wrong!</div>
+  }
+
   return (
     <section className='section__container product__container'>
       <h2 className='section__header'>Trending Products</h2>
