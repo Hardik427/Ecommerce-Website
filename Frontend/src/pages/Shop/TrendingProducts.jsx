@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Productcards from './ProductCards';
-// import products from '../../data/products.json'
 import { useFetchAllProductsQuery } from '../../redux/features/product/productsApi';
 
 
 const TrendingProducts = () => {
   const [visibleProducts, setVisibleProducts] = useState(8);
+  const [animate, setAnimate] = useState(false);
+  const sectionRef = useRef(null);
 
   const loadMoreProducts = () => {
-    setVisibleProducts(prevCount => prevCount + 4)
+    setVisibleProducts(prevCount => prevCount + 4);
   }
 
   const { data: { products = [] } = {}, error, isLoading } = useFetchAllProductsQuery({
@@ -19,6 +20,21 @@ const TrendingProducts = () => {
     page: 1,
     limit: 100 
   }); 
+
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setAnimate(true);
+        } else {
+          setAnimate(false);
+        }
+      },
+      { threshold: 0.2 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [visibleProducts]);
 
   if (isLoading) {
     return (
@@ -33,11 +49,10 @@ const TrendingProducts = () => {
   }
 
   return (
-    <section className='section__container product__container'>
+    <section className='section__container product__container' ref={sectionRef}>
       <h2 className='section__header'>Trending Products</h2>
       <p className='section__subheader pb-12'>Discover the Hottest picks: Elevate Your Style with Our Curated Collection of Trending Women's Fashion Products.</p>
-
-      <Productcards products={products.slice(0, visibleProducts)} />
+      <Productcards products={products.slice(0, visibleProducts)} animate={animate} />
       <div className='product__btn'>
         {
           visibleProducts < products.length && (
