@@ -1,116 +1,154 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import CartModal from "../pages/Shop/CartModal";
-import avatarImg from '../assets/avatar.png'
+import avatarImg from "../assets/avatar.png";
 import { useLogoutUserMutation } from "../redux/features/auth/authApi";
 import { logout } from "../redux/features/auth/authSlice";
 
 const Navbar = () => {
+  const products = useSelector((state) => state.cart.products);
+  const { user } = useSelector((state) => state.auth);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const dispatch = useDispatch();
+  const [logoutUser] = useLogoutUserMutation();
+  const navigate = useNavigate();
+  const dropDownRef = useRef(null);
 
-    const products = useSelector((state) => state.cart.products);
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const handleCartToggle = () => {
-        setIsCartOpen(!isCartOpen);
+  const handleCartToggle = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+
+  const handleDropDownToggle = () => {
+    setIsDropDownOpen((prev) => !prev);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser().unwrap();
+      dispatch(logout());
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to log out", error);
     }
+  };
 
-    const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.auth)
-    const [logoutUser] = useLogoutUserMutation();
-    const navigate = useNavigate();
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+        setIsDropDownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
+  const adminDropDownMenu = [
+    { label: "Dashboard", path: "/dashboard/admin" },
+    { label: "Manage Items", path: "/dashboard/manage-products" },
+    { label: "All Orders", path: "/dashboard/manage-orders" },
+    { label: "Add New Post", path: "/dashboard/add-new-post" },
+  ];
 
-    const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-    const handleDropDownToggle = () => {
-        setIsDropDownOpen(!isDropDownOpen);
-    }
+  const userDropDownMenu = [
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Profile", path: "/dashboard/profile" },
+    { label: "Payments", path: "/dashboard/payments" },
+    { label: "Orders", path: "/dashboard/orders" },
+  ];
 
-    const adminDropDownMenu = [
-        { label: "Dashboard", path: '/dashboard/admin' },
-        { label: "Manage Items", path: '/dashboard/manage-products' },
-        { label: "All Orders", path: '/dashboard/manage-orders' },
-        { label: "Add New Post", path: '/dashboard/add-new-post' },
-    ]
+  const dropDownMenus = user?.role === "admin" ? adminDropDownMenu : userDropDownMenu;
 
-    const userDropDownMenu = [
-        { label: "Dashboard", path: '/dashboard' },
-        { label: "Profile", path: '/dashboard/profile' },
-        { label: "Payments", path: '/dashboard/payments' },
-        { label: "Orders", path: '/dashboard/orders' },
-    ]
+  return (
+    <header className="fixed-nav-bar w-nav">
+      <nav className="max-w-screen-2xl mx-auto px-4 flex justify-between items-center">
+        {/* Left Links */}
+        <ul className="nav__links flex space-x-6">
+          <li className="link"><Link to="/">Home</Link></li>
+          <li className="link"><Link to="/shop">Shop</Link></li>
+          <li className="link"><Link to="/">Pages</Link></li>
+          <li className="link"><Link to={user ? "/contact" : "/"}>Contact</Link></li>
+        </ul>
 
-    const handleLogout = async () => {
-        try {
-            await logoutUser().unwrap()
-            dispatch(logout())
-            navigate('/')
-        } catch (error) {
-            console.error("Failed to log out ", error);
-        }
-    }
+        {/* Logo */}
+        <div className="nav__logo text-xl font-bold">
+          <Link to="/">Fashion<span className="text-primary">.</span></Link>
+        </div>
 
-    const dropDownMenus = user?.role === 'admin' ? [...adminDropDownMenu] : [...userDropDownMenu]
-    return (
-        <header className="fixed-nav-bar w-nav">
-            <nav className="max-w-screen-2xl mx-auto px-4 flex justify-between items-center">
-                <ul className="nav__links">
-                    <li className="link"><Link to="/">Home</Link></li>
-                    <li className="link"><Link to="/shop">Shop</Link></li>
-                    <li className="link"><Link to="/">Pages</Link></li>
-                    <li className="link"><Link to="/contact">Contact</Link></li>
-                </ul>
-                <div className="nav__logo">
-                    <Link to="/">Fashion<span>.</span></Link>
-                </div>
-                <div className="nav__icons relative">
-                    <span><Link to="/search"><i className="ri-search-2-line"></i>
-                    </Link></span>
-                    <span>
-                        <button onClick={handleCartToggle} className=" hover:text-primary">
-                            <i className="ri-shopping-bag-3-line"></i>
-                            <sup className=" text-sm inline-block px-1.5 text-white rounded-full bg-primary text-center">{products.length}</sup>
+        {/* Right Icons */}
+        <div className="nav__icons relative flex items-center space-x-4">
+          {/* Search */}
+          <span>
+            <Link to="/search" aria-label="Search">
+              <i className="ri-search-2-line"></i>
+            </Link>
+          </span>
+
+          {/* Cart */}
+          <span>
+            <button onClick={handleCartToggle} className="hover:text-primary relative" aria-label="Cart">
+              <i className="ri-shopping-bag-3-line"></i>
+              <sup className="text-sm px-1.5 text-white rounded-full bg-primary absolute -top-2 -right-2">
+                {products.length}
+              </sup>
+            </button>
+          </span>
+
+          {/* User */}
+          <span className="relative">
+            {user ? (
+              <>
+                <img
+                  src={user?.profileImage || avatarImg}
+                  alt={`${user.name || "User"} profile`}
+                  onClick={handleDropDownToggle}
+                  className="w-6 h-6 rounded-full cursor-pointer"
+                />
+                {isDropDownOpen && (
+                  <div
+                    ref={dropDownRef}
+                    className="absolute right-0 mt-3 p-4 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                  >
+                    <ul className="font-medium space-y-4 p-2">
+                      {dropDownMenus.map((menu, index) => (
+                        <li key={index}>
+                          <Link
+                            onClick={() => setIsDropDownOpen(false)}
+                            className="dropdown-items"
+                            to={menu.path}
+                          >
+                            {menu.label}
+                          </Link>
+                        </li>
+                      ))}
+                      <li>
+                        <button onClick={handleLogout} className="dropdown-items w-full text-left">
+                          Logout
                         </button>
-                    </span>
-                    <span>
-                        {
-                            user && user ? (
-                                <>
-                                    <img
-                                        onClick={handleDropDownToggle}
-                                        src={user?.profileImage || avatarImg} alt="" className="size-6 rounded-full cursor-pointer" />
-                                    {
-                                        isDropDownOpen && (
-                                            <div className="absolute right-0 mt-3 p-4 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                                                <ul className=" font-medium space-y-4 p-2">
-                                                    {dropDownMenus.map((menu, index) => (
-                                                        <li key={index}>
-                                                            <Link
-                                                                onClick={() => { setIsDropDownOpen(false) }}
-                                                                className="dropdown-items" to={menu.path}>{menu.label}</Link>
-                                                        </li>
-                                                    ))}
-                                                    <li><Link onClick={handleLogout} className="dropdown-items">
-                                                        Logout
-                                                    </Link></li>
-                                                </ul>
-                                            </div>
-                                        )
-                                    }
-                                </>
-                            ) : (
-                                <Link to="/login">
-                                    <i className="ri-user-fill"></i>
-                                </Link>
-                            )
-                        }
-                    </span>
-                </div>
-            </nav>
-            {
-                isCartOpen && <CartModal products={products} isOpen={isCartOpen} onClose={handleCartToggle} />
-            }
-        </header>
-    )
-}
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Link to="/login" aria-label="Login">
+                <i className="ri-user-fill"></i>
+              </Link>
+            )}
+          </span>
+        </div>
+      </nav>
+
+      {/* Cart Modal */}
+      {isCartOpen && (
+        <CartModal products={products} isOpen={isCartOpen} onClose={handleCartToggle} />
+      )}
+    </header>
+  );
+};
 
 export default Navbar;
