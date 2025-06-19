@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link, useParams} from 'react-router-dom'
 import RatingStars from './../../../components/RatingStars';
-import { useFetchProductByIdQuery } from '../../../redux/features/product/ProductsApi';
+import { useFetchProductByIdQuery } from '../../../redux/features/product/productsApi';
 import { addToCart } from '../../../redux/features/cart/cartSlice';
 import { useDispatch } from 'react-redux';
 const SingleProduct = () => {

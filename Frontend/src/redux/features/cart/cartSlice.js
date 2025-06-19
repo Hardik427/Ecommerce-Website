@@ -6,11 +6,10 @@ const initialState = {
     totalPrice: 0,
     tax: 0,
     taxRate: 0.05,
-    grandTotal: 0
+    grandTotal: 0,
 }
 
-const cartSlice = createSlice(
-    {
+const cartSlice = createSlice({
         name: 'cart',
         initialState,
         reducers: {

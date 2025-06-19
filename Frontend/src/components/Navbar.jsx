@@ -5,19 +5,21 @@ import CartModal from "../pages/Shop/CartModal";
 import avatarImg from "../assets/avatar.png";
 import { useLogoutUserMutation } from "../redux/features/auth/authApi";
 import { logout } from "../redux/features/auth/authSlice";
+import { toggleCart } from "../redux/features/cart/uislice";
 
 const Navbar = () => {
   const products = useSelector((state) => state.cart.products);
   const { user } = useSelector((state) => state.auth);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const dispatch = useDispatch();
   const [logoutUser] = useLogoutUserMutation();
   const navigate = useNavigate();
   const dropDownRef = useRef(null);
+  const isCartOpen = useSelector((state) => state.ui.isCartOpen);
 
   const handleCartToggle = () => {
-    setIsCartOpen(!isCartOpen);
+    dispatch(toggleCart())
+    console.log(isCartOpen);
   };
 
   const handleDropDownToggle = () => {
