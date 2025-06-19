@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useCreateOrderMutation } from "../../redux/features/order/ordersApi";
 import { clearCart } from "../../redux/features/cart/cartSlice";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 
 const PlaceOrder = () => {
   const dispatch = useDispatch();
@@ -13,6 +16,8 @@ const PlaceOrder = () => {
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [createOrder] = useCreateOrderMutation();
+  const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
 
   const cartProducts = useSelector((state) => state.cart.products);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
@@ -30,6 +35,14 @@ const PlaceOrder = () => {
     if (!address || !phone || products.length === 0) {
       setErrorMsg("Please fill all fields and add products to cart.");
       setPlacing(false);
+      return;
+    }
+
+    if (!user) {
+      setErrorMsg("You must be logged in to place an order.");
+      setPlacing(false);
+      navigate('/login');
+      alert("Please login to place an order.");
       return;
     }
 
@@ -104,7 +117,8 @@ const PlaceOrder = () => {
               <option value="PayPal">PayPal</option>
             </select>
           </div>
-          <button type="submit" className="btn mt-4" disabled={placing}>
+          <button type="submit" className="btn mt-4" disabled={placing}
+          >
             {placing ? "Placing Order..." : "Place Order"}
           </button>
         </form>
