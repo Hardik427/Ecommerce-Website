@@ -7,10 +7,11 @@ const verifyAdmin = require('../middleware/verifyAdmin');
 const router = express.Router();
 
 //post a product 
-router.post('/create-product', async (req, res) => {
+router.post('/create-product',verifyToken,verifyAdmin, async (req, res) => {
     try {
         const newProduct = new Product({
-            ...req.body
+            ...req.body,
+            author : req.userId
         })
         const savedProduct = await newProduct.save();
 
@@ -21,7 +22,7 @@ router.post('/create-product', async (req, res) => {
                 0)
             const averageRating = totalRating / reviews.length;
             savedProduct.rating = averageRating;
-            savedProduct.save();
+            await savedProduct.save();
         }
         res.status(201).send(savedProduct)
     } catch (error) {

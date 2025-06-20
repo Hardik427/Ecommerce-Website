@@ -10,8 +10,8 @@ import Register from "../components/Register";
 import Contact from "../pages/Contact/Contact";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import PlaceOrder from "../pages/Orders/PlaceOrder";
-import Orders from "../pages/Orders/Orders";
 import ManageProducts from "../pages/Products/ManageProducts";
+import AddProducts from './../pages/Products/AddProducts';
 
 const router = createBrowserRouter([
     {
@@ -24,9 +24,10 @@ const router = createBrowserRouter([
             { path: "/shop", element: <ShopPage /> },
             { path: "/shop/:id", element: <SingleProduct /> },
             { path: "/contact", element: <Contact/> },
-            { path: "/dashboard/admin", element:<AdminDashboard/>},
+            { path: "/admin/dashboard", element:<AdminDashboard/>},
             { path: "/place-order", element: <PlaceOrder /> },
-            { path: "/dashboard/manage-products/", element: <ManageProducts />}
+            { path: "/admin/manage-products", element: <ManageProducts />},
+            { path: "/admin/add-product", element: <AddProducts />}
         ]
     },
     {

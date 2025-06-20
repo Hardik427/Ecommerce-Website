@@ -49,10 +49,10 @@ const Navbar = () => {
   }, []);
 
   const adminDropDownMenu = [
-    { label: "Dashboard", path: "/dashboard/admin" },
-    { label: "Manage Items", path: "/dashboard/manage-products" },
-    { label: "All Orders", path: "/dashboard/manage-orders" },
-    { label: "Add New Post", path: "/dashboard/add-new-post" },
+    { label: "Dashboard", path: "/admin/dashboard" },
+    { label: "Manage Items", path: "/admin/manage-products" },
+    { label: "All Orders", path: "/admin/manage-orders" },
+    { label: "Add New Post", path: "/admin/add-new-post" },
   ];
 
   const userDropDownMenu = [
