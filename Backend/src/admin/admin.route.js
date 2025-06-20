@@ -26,4 +26,5 @@ router.get('/summary',verifyToken,verifyAdmin, async (req, res) => {
         console.log(error)
     }
 })
+
 module.exports = router
