@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const PlaceOrder = () => {
+
   const dispatch = useDispatch();
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -39,13 +40,11 @@ const PlaceOrder = () => {
     }
 
     if (!user) {
-      setErrorMsg("You must be logged in to place an order.");
       setPlacing(false);
       navigate('/login');
       alert("Please login to place an order.");
       return;
     }
-
     try {
       await createOrder({
         address,
@@ -61,8 +60,7 @@ const PlaceOrder = () => {
       setErrorMsg(
         err?.data?.message || "Failed to place order. Please try again."  
       )
-    }
-    setPlacing(false);
+    setPlacing(false);}
   };
 
   return (
