@@ -22,11 +22,11 @@ router.post('/login', async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user) {
-            res.status(404).send({ message: "You are not Registered" });
+            return res.status(404).send({ message: "You are not Registered" });
         }
         const isMatch = await user.comparePassword(password)
         if (!isMatch) {
-            res.status(401).send({ message: "Unauthorized Access" });
+           return res.status(401).send({ message: "Unauthorized Access" });
         }
 
         const token = await generateToken(user._id);
@@ -36,11 +36,11 @@ router.post('/login', async (req, res) => {
             secure: true,
             sameSite: 'None'
         });
-        res.status(200).send({ message: "Logged In Successfull!", token, user })
+         return res.status(200).send({ message: "Logged In Successfull!", token, user })
 
     } catch (error) {
         console.log(error);
-        res.status(500).send({ message: "Error Logging In User" })
+        return res.status(500).send({ message: "Error Logging In User" })
     }
 })
 

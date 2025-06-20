@@ -13,6 +13,8 @@ import PlaceOrder from "../pages/Orders/PlaceOrder";
 import ManageProducts from "../pages/Products/ManageProducts";
 import AddProducts from './../pages/Products/AddProducts';
 import EditProduct from "../pages/Products/EditProduct";
+import ManageOrders from "../pages/Orders/ManageOrders";
+import Orders from "../pages/Orders/Orders";
 
 const router = createBrowserRouter([
     {
@@ -29,7 +31,9 @@ const router = createBrowserRouter([
             { path: "/place-order", element: <PlaceOrder /> },
             { path: "/admin/manage-products", element: <ManageProducts />},
             { path: "/admin/add-product", element: <AddProducts />},
-            { path: "/admin/edit-product/:id", element: <EditProduct />}
+            { path: "/admin/edit-product/:id", element: <EditProduct />},
+            { path: "/admin/manage-orders", element: <ManageOrders />},
+            { path: "/user/orders", element: <Orders />}
         ]
     },
     {
