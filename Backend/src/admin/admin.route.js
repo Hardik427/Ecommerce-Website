@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get('/summary',verifyToken,verifyAdmin, async (req, res) => {
     try {
-        console.log('Summary endpoint hit:', req.userId);
         const totalRevenueAgg = await Order.aggregate([
             { $group: { _id: null, total: { $sum: '$totalPrice' } } }
         ]);
