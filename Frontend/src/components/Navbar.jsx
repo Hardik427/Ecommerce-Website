@@ -5,7 +5,7 @@ import CartModal from "../pages/Shop/CartModal";
 import avatarImg from "../assets/avatar.png";
 import { useLogoutUserMutation } from "../redux/features/auth/authApi";
 import { logout } from "../redux/features/auth/authSlice";
-import { toggleCart } from "../redux/features/cart/uislice";
+import { toggleCart } from "../redux/features/cart/uiSlice";
 
 const Navbar = () => {
   const products = useSelector((state) => state.cart.products);
@@ -19,7 +19,6 @@ const Navbar = () => {
 
   const handleCartToggle = () => {
     dispatch(toggleCart())
-    console.log(isCartOpen);
   };
 
   const handleDropDownToggle = () => {
