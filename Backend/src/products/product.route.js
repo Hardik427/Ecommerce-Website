@@ -62,6 +62,17 @@ router.get('/', async (req, res) => {
     }
 })
 
+//get products without filter
+router.get('/get-products', async (req, res) => {
+  try {
+    const products = await Product.find({});
+    res.status(200).json({ products });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: 'Failed to fetch products' });
+  }
+});
+
 //get single product
 router.get('/:id', async (req, res) => {
     try {
