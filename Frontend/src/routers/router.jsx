@@ -10,6 +10,7 @@ import Register from "../components/Register";
 import Contact from "../pages/Contact/Contact";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import PlaceOrder from "../pages/Orders/PlaceOrder";
+import Orders from "../pages/Orders/Orders";
 
 const router = createBrowserRouter([
     {
@@ -23,7 +24,8 @@ const router = createBrowserRouter([
             { path: "/shop/:id", element: <SingleProduct /> },
             { path: "/contact", element: <Contact/> },
             { path: "/dashboard/admin", element:<AdminDashboard/>},
-            { path: "/place-order", element: <PlaceOrder /> }
+            { path: "/place-order", element: <PlaceOrder /> },
+            {path: "/dashboard/orders", element: <Orders />}
         ]
     },
     {

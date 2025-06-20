@@ -53,4 +53,4 @@ export const {
     useUpdateOrderStatusMutation,
     useDeleteOrderMutation,
 } = orderApi;
-export default orderApi.reducer;
+export default orderApi;
