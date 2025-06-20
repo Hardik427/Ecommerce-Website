@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useFetchProductsQuery } from '../../redux/features/product/productsApi';
+import { useFetchProductsQuery, useDeleteProductMutation } from '../../redux/features/product/productsApi';
 
 const ManageProducts = () => {
   const {
@@ -9,12 +9,23 @@ const ManageProducts = () => {
     isLoading,
   } = useFetchProductsQuery();
 
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      try {
+        await deleteProduct(id).unwrap();
+      } catch (err) {
+        console.error('Failed to delete product:', err);
+      }
+    }
+  };
+
   if (isLoading) return <h2 className="text-center mt-10">Loading products...</h2>;
   if (error) return <h2 className="text-center mt-10 text-red-600">Failed to load products.</h2>;
 
   return (
     <section className="section__container py-10">
-      {/* Header and Add Product Button */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="section__header">Manage Products</h1>
         <Link
@@ -25,7 +36,6 @@ const ManageProducts = () => {
         </Link>
       </div>
 
-      {/* Products Table */}
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full table-auto text-sm">
           <thead className="bg-gray-100 text-gray-700">
@@ -49,12 +59,15 @@ const ManageProducts = () => {
                 </td>
                 <td className="p-4">{product.name}</td>
                 <td className="p-4">{product.price}</td>
-                <td className="p-4">In stock</td> {/* Replace with actual stock if available */}
+                <td className="p-4">In stock</td>
                 <td className="p-4 space-x-2">
-                  <button className="btn text-sm bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                    <Link to={`/admin/edit-product/${product._id}`}> <button className="btn text-sm bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                     Edit
-                  </button>
-                  <button className="btn text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                  </button></Link>
+                  <button
+                    className="btn text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    onClick={() => handleDelete(product._id)}
+                  >
                     Delete
                   </button>
                 </td>

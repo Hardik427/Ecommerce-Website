@@ -12,6 +12,7 @@ import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import PlaceOrder from "../pages/Orders/PlaceOrder";
 import ManageProducts from "../pages/Products/ManageProducts";
 import AddProducts from './../pages/Products/AddProducts';
+import EditProduct from "../pages/Products/EditProduct";
 
 const router = createBrowserRouter([
     {
@@ -27,7 +28,8 @@ const router = createBrowserRouter([
             { path: "/admin/dashboard", element:<AdminDashboard/>},
             { path: "/place-order", element: <PlaceOrder /> },
             { path: "/admin/manage-products", element: <ManageProducts />},
-            { path: "/admin/add-product", element: <AddProducts />}
+            { path: "/admin/add-product", element: <AddProducts />},
+            { path: "/admin/edit-product/:id", element: <EditProduct />}
         ]
     },
     {

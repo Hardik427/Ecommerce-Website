@@ -30,9 +30,10 @@ const productsApi = createApi({
         }),
         fetchProducts: builder.query({
             query: () => ({
-                url: '/get-products', 
+                url: '/get-products',
                 method: 'GET',
             }),
+            providesTags: ["Products"],
         }),
         addProduct: builder.mutation({
             query: (newProduct) => ({
@@ -57,11 +58,12 @@ const productsApi = createApi({
         }),
         deleteProduct: builder.mutation({
             query: (id) => ({
-                url: `/${id}`,
+                url: `delete-product/${id}`,
                 method: 'DELETE',
                 credentials: 'include'
             }),
-            invalidatesTags: (result, error, id) => [{ type: 'Products', id }],
+
+            invalidatesTags: ['Products'],
         })
     })
 });

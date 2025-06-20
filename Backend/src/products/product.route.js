@@ -95,7 +95,7 @@ router.patch('/update-product/:id', verifyToken,verifyAdmin, async (req, res) =>
     try {
         const productId = req.params.id;
         const updatedProduct = await Product.findByIdAndUpdate(productId, { ...req.body }, { new: true })
-
+  
         if (!updatedProduct) {
             res.status(404).send({ message: "Product not found." })
         }
