@@ -77,7 +77,7 @@ const PlaceOrder = () => {
             <div className="bg-green-100 text-green-700 p-4 rounded text-center">
               🎉 Your order has been placed successfully!
               <br />
-              <Link to="/user/orders" className="text-blue-600 underline">View Orders</Link>
+              <Link to="/dashboard/orders" className="text-blue-600 underline">View Orders</Link>
             </div>
           )}
 

@@ -16,5 +16,5 @@ export const store = configureStore({
     [orderApi.reducerPath]: orderApi.reducer  
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware, productsApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware, productsApi.middleware, orderApi.middleware),
 });
