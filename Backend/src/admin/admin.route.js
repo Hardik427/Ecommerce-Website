@@ -16,7 +16,7 @@ router.get('/summary',verifyToken,verifyAdmin, async (req, res) => {
         const totalProducts = await Product.countDocuments();
         const totalCustomers = await User.countDocuments({ role: 'user' });
 
-        res.json({
+      res.json({
       totalRevenue,
       totalOrders,
       totalProducts,
